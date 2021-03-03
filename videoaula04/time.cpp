@@ -1,68 +1,73 @@
 /* Implementação da classe Time */
-#include <iostream> // Para usar a função std::cout
-#include "time.h"   // Para visualizar a classe Time
+#include <iostream>  // Para usar a função std::cout.
+#include "time.h"    
+// Para visualizar a classe Time.
 
-using namespace std; // Para escrever cout ao invés de std::cout
+using namespace std; // Para escrever cout ao invés de
+// std::cout.
 
-// Getters
+/* 
+   Getters
+ */
 int Time::getHour() const {
-    return hour;
+  return hour;
 }
 
 int Time::getMinute() const {
-    return minute;
+  return minute;
 }
 
 int Time::getSecond() const {
-    return second;
+  return second;
 }
 
-/* 
-    Setters
-    
-    Nos métdos "set", a classe está recebendo como parâmetro uma
-    variável com o mesmo nome do atributo. Esse fato faz com que o
-    atributo seja "escondido". Por exemplo, no método setHour abaixo, 
-    quando usamos a variável "hour", estaremos nos referindo ao 
-    parâmetro e não ao atributo da classe.
+/*
+  Nos métodos "set", a classe está recebendo como parâmetro uma
+  variável com o mesmo nome do atributo. Esse fato faz com que o
+  atributo seja "escondido". Por exemplo, no método setHour abaixo,
+  quando usarmos a variável "hour", estaremos nos referindo ao
+  parâmetro e não ao atributo da classe.
 
-    Para contornar esse problema, usamos a palavra reservada "this".
-    Assim:
+  Para contornar esse problema, usamos a palavra reservada
+  "this". Assim:
 
-    this->hour, this->minute e this->second se referem aos atributos.
-    hour, minute e secont se referem aos parâmetros dos métodos abaixo.
-*/
+  this->hour, this->minute e this->second se referem aos atributos.
 
+  hour, minute e second se referem aos parâmetros dos métodos abaixo.
+ */
+
+/*
+  Setters
+ */
 void Time::setHour(int hour) {
-    this->hour = hour;
+  this->hour = hour;
 }
 
 void Time::setMinute(int minute) {
-    this->minute = minute;
+  this->minute = minute;
 }
 
-void Time::setSecond(int second) {
-    this->second = second;
+void Time::setSecond(int second){
+  this->second = second;
 }
 
-// Função Print
-void Time::print() const{
-    cout << hour << ":" << minute << ":" << second << endl;
+void Time::print() const {
+  cout << hour << ":" << minute << ":" << second << endl;     
 }
 
 void Time::nextSecond() {
-    second +=1;
-    if (second >= 60) {
-        second = 0;
-        minute +=1;
-    }
-    if (minute >= 60) {
-        minute = 0;
-        hour += 1;
-    }
-    if (hour >= 24) {
-        hour = 0;
-    }
+  second += 1;
+  if (second >= 60) {
+    second = 0;
+    minute += 1;
+  }
+  if (minute >= 60) {
+    minute = 0;
+    hour += 1;
+  }
+  if (hour >= 24) {
+    hour = 0;
+  }
 }
 
 /*
