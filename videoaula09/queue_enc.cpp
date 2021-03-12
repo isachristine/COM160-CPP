@@ -1,5 +1,5 @@
 #include <iostream>
-#include <new>
+#include <new> // Para bad_alloc
 #include <cstddef> // Para funcionar o NULL
 #include "queue_enc.h"
 
@@ -52,33 +52,67 @@ bool Queue_enc::isFull() const {
 }
 
 void Queue_enc::enqueue(ItemType item) {
-    // Pensar que vamos começar incluindo final
-    NodeType * newNode;
-    newNode -> info = item; 
-    // fazemos o nó receber a informação passada pelo parâmetro item
-    newNode -> next = NULL;
-    // Isso porque, como estamos alocando no fim da fila, não haverá
-    // itens para esse novo nó apontar.
-    if (rear == NULL) {
-        // Se não houver uma fila, é porque não tinha elementos nela, 
-        // Então precisamos fazer com que o front aponte para o novo
-        // nó, pois ele também será o começo (já que é o primeiro 
-        // elemento dessa fila)
-        front -> next = newNode;
-    } else {
-        // Como existe uma lista e criamos um novo nó, o fim da fila
-        // precisa apontar para ele, afinal, ele virou o fim da fila.
-        rear -> next = newNode;
+    // Primeiro, para adicionar itens na fila, precisamos saber se
+    // ela está cheia. Se não estiver...
+    if (!isFull()) {
+        // Pensar que vamos começar incluindo final
+        NodeType * newNode;
+        newNode = new NodeType;
+        newNode -> info = item; 
+        // fazemos o nó receber a informação passada pelo parâmetro item
+        newNode -> next = NULL;
+        // Fazemos o novo nó apontar para nulo como próximo.
+        // Isso porque, como estamos alocando no fim da fila, não haverá
+        // itens para esse novo nó apontar.
+        if (rear == NULL) 
+            // Se não houver uma fila, é porque não tinha elementos nela, 
+            // Então precisamos fazer com que o front aponte para o novo
+            // nó, pois ele também será o começo (já que é o primeiro 
+            // elemento dessa fila)
+            front = newNode;
+        else 
+            // Como existe uma lista e criamos um novo nó, o fim da fila
+            // precisa apontar para ele, afinal, ele virou o fim da fila.
+            rear -> next = newNode;
+            rear = newNode;
+    }
+    else {
+        throw "Queue is already full!";
     }
 }
 
-ItemType dequeue() {
-
+ItemType Queue_enc::dequeue() 
+{
+    if (!isEmpty()) {
+    // Se não estiver vazio...
+    // Precisamos deletar o elemento que o front está apontando.
+    // Criamos um ponteiro temporário
+    NodeType * pontTemp;
+    // Fazemos o ponteiro apontar para o bloco no front.
+    pontTemp = front;
+    // Aí precisamos criar um itemtype para armazenar o valor
+    // que consta na memomória e fazer com que esse item receba
+    // o dado apontado pelo ponteiro front.
+    // Armazenamos isso numa var separada, pra podermos dar ela
+    // como retorno ao fim do dequeue.
+    ItemType item = front -> info;
+    // Depois apontamos o front para o próximo bloco na fila.
+    front = front -> next;
+    if (front == NULL) 
+        // Se o ponteiro da frente for nulo, sabemos que era o 
+        // último item da fila. Então precisamos fazer com que
+        // o rear também aponte para nulo.
+        rear = NULL;
+    delete pontTemp;
+    return item;
+    } else {
+        throw "Queue is empty!";
+    }
 }
 
 void Queue_enc::print() const {
-    // Criamos um ponteiro temporário
-    NodeType * pontTemp;
+    // Criamos um ponteiro temporário recebendo o bloco de front.
+    NodeType * pontTemp = front;
     // Enquanto o ponteiro temporário for diferente de nulo é 
     // porque ainda há itens dentro da nossa fila, então segue
     // imprimindo.
@@ -88,13 +122,3 @@ void Queue_enc::print() const {
     }
     cout << endl;
 }
-
-/*
-Queue_enc(); // Construtor
-        ~Queue_enc(); // Destrutor
-        bool isEmpty() const;
-        bool isFull() const;
-        void print() const;
-        void enqueue(ItemType); // Adicionar elementos
-        ItemType dequeue(); // Remover elementos
-*/
